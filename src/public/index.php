@@ -3,6 +3,8 @@
 require './../../vendor/autoload.php';
 require './../routes.php';
 
+session_start();
+
 // Loading .env var
 $dotenv = new Dotenv\Dotenv(__DIR__ . '/../../');
 $dotenv->load();
@@ -24,12 +26,17 @@ $config = [
 
 // Init app
 $app = new \Slim\App(['settings' => $config]);
-
-// Loading dependencies into container
 $container = $app->getContainer();
 
 // Loading Template
-$container->view = new \Slim\Views\PhpRenderer('../resources/templates/');
+$container['view'] = function ($container) {
+  $view = new \Slim\Views\Twig('../resources/templates/');
+  $router = $container->get('router');
+  $uri = \Slim\Http\Uri::createFromEnvironment(new \Slim\Http\Environment($_SERVER));
+  $view->addExtension(new Slim\Views\TwigExtension($router, $uri));
+
+  return $view;
+};
 
 // Loading DBConn & Eloquent
 $container['db'] = function ($container) {

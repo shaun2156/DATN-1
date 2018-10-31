@@ -1,5 +1,5 @@
 <?php
-namespace App\Controllers;
+namespace App\Controllers\Auth;
 
 use Psr\Container\ContainerInterface;
 
@@ -10,13 +10,14 @@ class HomeAction
 
     public function __construct(ContainerInterface $container) {
         $this->container = $container;
-        $this->table = $container->get('db')->table('person');
     }
 
     public function __invoke($request, $response, $args) {
-        $person = $this->table->where('person_id', 1)->get();
-        return $this->container->view->render($response, 'layout.phtml', [
-            'person' => $person[0]
-        ]);
+        if ($_SESSION['error'] && strlen($_SESSION['error']) !== 0) {
+            $args['error'] = $_SESSION['error'];
+            unset($_SESSION['error']);
+        }
+
+        return $this->container->view->render($response, 'layout.twig', $args);
     }
 }
