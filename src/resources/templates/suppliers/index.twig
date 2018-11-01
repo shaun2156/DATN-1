@@ -1,0 +1,94 @@
+{% extends "layouts/app.twig" %}
+
+{% block content %}
+<div>
+  <div class="cate-index">
+    <div>
+        <a href="{{ path_for('suppliers.create') }}" class="btn btn-primary btn-cate-new">Add Supplier</a>
+    </div>
+    <table class="table">
+        <thead>
+            <td scope="col">Id</td>
+            <td scope="col">Name</td>
+            <td scope="col">Address</td>
+            <td scope="col">Description</td>
+            <td scope="col">Contact</td>
+            <td scope="col">Created By</td>
+            <td scope="col">Created At</td>
+            <td scope="col">Updated By</td>
+            <td scope="col">Updated At</td>
+        </thead>
+
+        <tbody>
+            {% for supplier in suppliers %}
+                <tr>
+                    <td>{{ supplier.supplier_id }}</td>
+                    <td>{{ supplier.name }}</td>
+                    <td>{{ supplier.address }}</td>
+                    <td>{{ supplier.description }}</td>
+                    <td>{{ supplier.contact_no }}</td>
+                    <td>{{ supplier.createdBy.person.full_name }}</td>
+                    <td>{{ supplier.created_date }}</td>
+                    <td>{{ supplier.updatedBy.person.full_name }}</td>
+                    <td>{{ supplier.updated_date }}</td>
+                    <td>
+                        <a href="{{ path_for('suppliers.edit', { id: supplier.supplier_id }) }}" class="btn btn-primary">Update</a>
+                    </td>
+                    <td>
+                        <form id="form_delete" method="POST"
+                            action="{{ path_for('suppliers.delete', { id: supplier.supplier_id }) }}">
+                            <button class="btn btn-danger" id="btn_delete">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+            {% if suppliers.onFirstPage %}
+            <li class="disabled page-item">
+            {% else %}
+            <li  class="page-item">
+            {% endif %}
+                <a href="{{ suppliers.previousPageUrl }}" class="page-link"  rel="prev">Previous</a>
+            </li>
+
+            {% for page in 1..suppliers.lastPage %}
+                {% if page == suppliers.currentPage %}
+                <li  class="page-item active">
+                {% else %}
+                <li  class="page-item">
+                {% endif %}
+                    <a href="{{ suppliers.url(page) }}" class="page-link"  rel="prev">{{page}}</a>
+                </li>
+            {% endfor %}
+
+            {% if suppliers.hasMorePages %}
+            <li  class="page-item">
+            {% else %}
+            <li class="page-item disabled">
+            {% endif %}
+                <a class="page-link" href="{{ suppliers.nextPageUrl }}" rel="next">Next</a>
+            </li>
+        </ul>
+    </nav>
+
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    $(document).ready(function() {
+        $("#btn_delete").on("click", function (event) {
+            event.preventDefault();
+            confirmDel = confirm("Are you sure to delete?");
+            if(confirmDel) {
+                $("#form_delete").submit();
+            }
+        });
+    });
+</script>
+{% endblock %}
