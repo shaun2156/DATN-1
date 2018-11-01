@@ -1,3 +1,4 @@
 require('bootstrap');
 
-console.log('Hello World');
+import $ from 'jquery';
+window.$ = window.jquery = $;

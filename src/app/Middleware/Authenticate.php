@@ -7,7 +7,7 @@ class Authenticate
   public function __invoke($request, $response, $next)
   {
     if (!$_SESSION['user']) {
-      return $response->withRedirect('/home');
+      return $response->withRedirect('/');
     }
 
     return $next($request, $response);
