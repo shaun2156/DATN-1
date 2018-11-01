@@ -1,0 +1,18 @@
+{% if currentCate %}
+<div class="form-check col-md-8">
+    <input class="form-check-input" type="radio" required name="parent_id"
+        id="category_{{ category.category_id }}" value="{{ category.category_id }}"
+        {% if currentCate.parent_category_id == category.category_id %}checked{% endif %}>
+{% else %}
+<div class="form-check col-md-8">
+    <input class="form-check-input" type="radio" required name="parent_id" id="category_{{ category.category_id }}" value="{{ category.category_id }}">
+{% endif %}
+
+    <label class="form-check-label" for="category_{{ category.category_id }}">{{ category.name }}</label>
+</div>
+
+<div style="margin-left: 3em;">
+    {% for cate in category.children %}
+        {% include 'categories/sub_categories.twig' with {'category': cate} %}
+    {% endfor %}
+</div>

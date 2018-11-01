@@ -1,0 +1,29 @@
+{% extends "layouts/app.twig" %}
+
+{% block content %}
+<div style="margin-top: 5%;">
+    <h1>Create Category</h1>
+    <form method="POST" action="{{ path_for('category.store') }}">
+        <div class="form-group row">
+            <label for="name" class="col-sm-2 col-form-label">Category Name</label>
+            <div class="col-sm-8">
+                <input type="text" id="name" name="name" class="form-control" placeholder="Name" required>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="description" class="col-sm-2 col-form-label">Description</label>
+            <div class="col-sm-8">
+                <textarea row="5" class="form-control" id="description" name="description" placeholder="Description"></textarea>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="inputEmail3" class="col-sm-2 col-form-label">Parent</label>
+            <div class="col-sm-8">
+                {% include 'categories/sub_categories.twig' with {'category': root} %}
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+        <a href="{{ path_for('category.index') }}" class="btn btn-warning">Cancel</a>
+    </form>
+</div>
+{% endblock %}
