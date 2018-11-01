@@ -20,8 +20,17 @@ class IndexAction
         $storages = Storage::with(['manager.person'])->paginate(10, ['*'], 'page', $page);
         $storages->setPath('/storages');
 
-        return $this->container->view->render($response, 'storages/index.twig', [
-            'storages' => $storages
-        ]);
+        if ($_SESSION['error'] && strlen($_SESSION['error']) !== 0) {
+            $args['error'] = $_SESSION['error'];
+            unset($_SESSION['error']);
+        }
+
+        if ($_SESSION['message'] && strlen($_SESSION['message']) !== 0) {
+            $args['message'] = $_SESSION['message'];
+            unset($_SESSION['message']);
+        }
+
+        $args['storages'] = $storages;
+        return $this->container->view->render($response, 'storages/index.twig', $args);
     }
 }
