@@ -34,20 +34,21 @@ $container['view'] = function ($container) {
   $router = $container->get('router');
   $uri = \Slim\Http\Uri::createFromEnvironment(new \Slim\Http\Environment($_SERVER));
   $view->addExtension(new Slim\Views\TwigExtension($router, $uri));
+  $view->getEnvironment()->addGlobal("session", $_SESSION);
 
   return $view;
 };
 
 // Loading DBConn & Eloquent
 $container['db'] = function ($container) {
-  $capsule = new \Illuminate\Database\Capsule\Manager;
+  $capsule = new \Illuminate\Database\Capsule\Manager();
   $capsule->addConnection($container['settings']['db']);
-
   $capsule->setAsGlobal();
   $capsule->bootEloquent();
-
   return $capsule;
 };
+
+$container->get('db');
 
 // Mapping routes
 routeMapping($app);

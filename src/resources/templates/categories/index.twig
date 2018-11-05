@@ -1,0 +1,72 @@
+{% extends "layouts/app.twig" %}
+
+{% block content %}
+<div>
+  <div class="cate-index">
+    <div>
+        <a href="{{ path_for('category.create') }}" class="btn btn-primary btn-cate-new">Create Category</a>
+    </div>
+    <table class="table">
+        <thead>
+            <td scope="col">Id</td>
+            <td scope="col">Name</td>
+            <td scope="col">Description</td>
+            <td scope="col">Parent Category</td>
+            <td scope="col">Created By</td>
+            <td scope="col">Created At</td>
+            <td scope="col">Updated By</td>
+            <td scope="col">Updated At</td>
+        </thead>
+
+        <tbody>
+            {% for cate in categories %}
+                <tr>
+                    <td>{{ cate.category_id }}</td>
+                    <td>{{ cate.name }}</td>
+                    <td>{{ cate.description }}</td>
+                    <td>{{ cate.parent.name }}</td>
+                    <td>{{ cate.createdBy.person.full_name }}</td>
+                    <td>{{ cate.created_date }}</td>
+                    <td>{{ cate.updatedBy.person.full_name }}</td>
+                    <td>{{ cate.updated_date }}</td>
+                    <td>
+                        <a href="{{ path_for('category.edit', { id: cate.category_id }) }}" class="btn btn-primary">Update</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+            {% if categories.onFirstPage %}
+            <li class="disabled page-item">
+            {% else %}
+            <li  class="page-item">
+            {% endif %}
+                <a href="{{ categories.previousPageUrl }}" class="page-link"  rel="prev">Previous</a>
+            </li>
+
+            {% for page in 1..categories.lastPage %}
+                {% if page == categories.currentPage %}
+                <li  class="page-item active">
+                {% else %}
+                <li  class="page-item">
+                {% endif %}
+                    <a href="{{ categories.url(page) }}" class="page-link"  rel="prev">{{page}}</a>
+                </li>
+            {% endfor %}
+
+            {% if categories.hasMorePages %}
+            <li  class="page-item">
+            {% else %}
+            <li class="page-item disabled">
+            {% endif %}
+                <a class="page-link" href="{{ categories.nextPageUrl }}" rel="next">Next</a>
+            </li>
+        </ul>
+    </nav>
+
+  </div>
+</div>
+{% endblock %}

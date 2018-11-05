@@ -18,6 +18,6 @@ class HomeAction
             unset($_SESSION['error']);
         }
 
-        return $this->container->view->render($response, 'layout.twig', $args);
+        return $this->container->view->render($response, 'login.twig', $args);
     }
 }
