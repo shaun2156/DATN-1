@@ -1,0 +1,92 @@
+{% extends "layouts/app.twig" %}
+
+{% block content %}
+<div>
+  <div class="cate-index">
+    <div>
+        <a href="{{ path_for('storages.create') }}" class="btn btn-primary btn-cate-new">Create Storage</a>
+    </div>
+    <table class="table">
+        <thead>
+            <td scope="col">Id</td>
+            <td scope="col">Name</td>
+            <td scope="col">Address</td>
+            <td scope="col">Manager</td>
+            <td scope="col">Created By</td>
+            <td scope="col">Created At</td>
+            <td scope="col">Updated By</td>
+            <td scope="col">Updated At</td>
+        </thead>
+
+        <tbody>
+            {% for store in storages %}
+                <tr>
+                    <td>{{ store.storage_id }}</td>
+                    <td>{{ store.name }}</td>
+                    <td>{{ store.address }}</td>
+                    <td>{{ store.manager.person.full_name }}</td>
+                    <td>{{ store.createdBy.person.full_name }}</td>
+                    <td>{{ store.created_date }}</td>
+                    <td>{{ store.updatedBy.person.full_name }}</td>
+                    <td>{{ store.updated_date }}</td>
+                    <td>
+                        <a href="{{ path_for('storages.edit', { id: store.storage_id }) }}" class="btn btn-primary">Update</a>
+                    </td>
+                    <td>
+                        <form id="form_delete" method="POST"
+                            action="{{ path_for('storages.delete', { id: store.storage_id }) }}">
+                            <button class="btn btn-danger" id="btn_delete">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+            {% if storages.onFirstPage %}
+            <li class="disabled page-item">
+            {% else %}
+            <li  class="page-item">
+            {% endif %}
+                <a href="{{ storages.previousPageUrl }}" class="page-link"  rel="prev">Previous</a>
+            </li>
+
+            {% for page in 1..storages.lastPage %}
+                {% if page == storages.currentPage %}
+                <li  class="page-item active">
+                {% else %}
+                <li  class="page-item">
+                {% endif %}
+                    <a href="{{ storages.url(page) }}" class="page-link"  rel="prev">{{page}}</a>
+                </li>
+            {% endfor %}
+
+            {% if storages.hasMorePages %}
+            <li  class="page-item">
+            {% else %}
+            <li class="page-item disabled">
+            {% endif %}
+                <a class="page-link" href="{{ storages.nextPageUrl }}" rel="next">Next</a>
+            </li>
+        </ul>
+    </nav>
+
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    $(document).ready(function() {
+        $("#btn_delete").on("click", function (event) {
+            event.preventDefault();
+            confirmDel = confirm("Are you sure to delete?");
+            if(confirmDel) {
+                $("#form_delete").submit();
+            }
+        });
+    });
+</script>
+{% endblock %}

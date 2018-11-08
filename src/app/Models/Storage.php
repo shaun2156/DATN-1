@@ -5,29 +5,24 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Employee;
 
-class Category extends Model
+class Storage extends Model
 {
-    protected $table = 'category';
-    protected $primaryKey = 'category_id';
-
+    protected $table = 'storage';
+    protected $primaryKey = 'storage_id';
     protected $fillable = [
         'name',
-        'description',
-        'parent_category_id',
-        'created_by'
+        'created_by',
+        'updated_by',
+        'address',
+        'manager_id',
     ];
 
     const CREATED_AT = 'created_date';
     const UPDATED_AT = 'updated_date';
 
-    public function parent()
+    public function manager()
     {
-        return $this->belongsTo(Category::class, 'parent_category_id', 'category_id');
-    }
-
-    public function children()
-    {
-        return $this->hasMany(Category::class, 'parent_category_id', 'category_id');
+        return $this->belongsTo(Employee::class, 'manager_id', 'employee_id');
     }
 
     public function createdBy()

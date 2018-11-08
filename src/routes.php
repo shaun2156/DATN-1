@@ -21,6 +21,17 @@ function routeMapping($app) {
       $app->post('/category/store', new \App\Controllers\Categories\StoreAction($container))->setName('category.store');
       $app->get('/category/edit/{id}', new \App\Controllers\Categories\EditAction($container))->setName('category.edit');
       $app->post('/category/update/{id}', new \App\Controllers\Categories\UpdateAction($container))->setName('category.update');
+
+      $app
+        ->group('/storages', function () use ($app, $container) {
+          $app->get('', new \App\Controllers\Storages\IndexAction($container))->setName('storages.index');
+          $app->get('/create', new \App\Controllers\Storages\CreateAction($container))->setName('storages.create');
+          $app->post('/store', new \App\Controllers\Storages\StoreAction($container))->setName('storages.store');
+          $app->get('/edit/{id}', new \App\Controllers\Storages\EditAction($container))->setName('storages.edit');
+          $app->post('/update/{id}', new \App\Controllers\Storages\UpdateAction($container))->setName('storages.update');
+          $app->post('/delete/{id}', new \App\Controllers\Storages\DeleteAction($container))->setName('storages.delete');
+        })
+        ->add(new \App\Middleware\RolesAuthorization('storage_manager'));
     })
     ->add(new \App\Middleware\Authenticate());
 }
