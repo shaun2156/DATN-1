@@ -2,6 +2,7 @@
 
 function routeMapping($app) {
   $container = $app->getContainer();
+  $storeManagerPolicy = new \App\Middleware\RolesAuthorization('storage_manager');
 
   $app
     ->group('', function () use ($app, $container) {
@@ -31,7 +32,18 @@ function routeMapping($app) {
           $app->post('/update/{id}', new \App\Controllers\Storages\UpdateAction($container))->setName('storages.update');
           $app->post('/delete/{id}', new \App\Controllers\Storages\DeleteAction($container))->setName('storages.delete');
         })
-        ->add(new \App\Middleware\RolesAuthorization('storage_manager'));
+        ->add(storeManagerPolicy);
+
+        $app
+          ->group('/suppliers', function () use ($app, $container) {
+            $app->get('', new \App\Controllers\Suppliers\IndexAction($container))->setName('suppliers.index');
+            $app->get('/create', new \App\Controllers\Suppliers\CreateAction($container))->setName('suppliers.create');
+            $app->post('/store', new \App\Controllers\Suppliers\StoreAction($container))->setName('suppliers.store');
+            $app->get('/edit/{id}', new \App\Controllers\Suppliers\EditAction($container))->setName('suppliers.edit');
+            $app->post('/update/{id}', new \App\Controllers\Suppliers\UpdateAction($container))->setName('suppliers.update');
+            $app->post('/delete/{id}', new \App\Controllers\Suppliers\DeleteAction($container))->setName('suppliers.delete');
+          })
+          ->add(storeManagerPolicy);
     })
     ->add(new \App\Middleware\Authenticate());
 }
