@@ -3,9 +3,19 @@
 {% block content %}
 <div>
   <div class="cate-index">
+
+    {%  if error  %}
+    <div style="margin: 1em;" class="alert alert-danger" role="alert">{{ error }}</div>
+    {%  endif  %}
+
+    {%  if message  %}
+    <div style="margin: 1em;" class="alert alert-success" role="alert">{{ message }}</div>
+    {%  endif  %}
+
     <div>
         <a href="{{ path_for('storages.create') }}" class="btn btn-primary btn-cate-new">Create Storage</a>
     </div>
+
     <table class="table">
         <thead>
             <td scope="col">Id</td>

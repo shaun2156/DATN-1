@@ -3,16 +3,22 @@
 function routeMapping($app) {
   $container = $app->getContainer();
   $storeManagerPolicy = new \App\Middleware\RolesAuthorization('storage_manager');
+  $authenticated = new \App\Middleware\RedirectIfAuthenticated();
+
+  $middlewares = [
+    'storeManagerPolicy' => $storeManagerPolicy,
+    'authenticated' => $authenticated,
+  ];
 
   $app
     ->group('', function () use ($app, $container) {
       $app->get('/', new \App\Controllers\Auth\HomeAction($container))->setName('home');
       $app->post('/login', new \App\Controllers\Auth\LoginAction($container))->setName('login');
     })
-    ->add(new \App\Middleware\RedirectIfAuthenticated());
+    ->add($middlewares['authenticated']);
 
   $app
-    ->group('', function () use ($app, $container) {
+    ->group('', function () use ($app, $container, $middlewares) {
       $app->get('/dashboard', new \App\Controllers\Auth\DashboardAction($container))->setName('dashboard');
       $app->post('/logout', new \App\Controllers\Auth\LogoutAction($container))->setName('logout');
 
@@ -32,7 +38,7 @@ function routeMapping($app) {
           $app->post('/update/{id}', new \App\Controllers\Storages\UpdateAction($container))->setName('storages.update');
           $app->post('/delete/{id}', new \App\Controllers\Storages\DeleteAction($container))->setName('storages.delete');
         })
-        ->add(storeManagerPolicy);
+        ->add($middlewares['storeManagerPolicy']);
 
         $app
           ->group('/suppliers', function () use ($app, $container) {
@@ -43,7 +49,7 @@ function routeMapping($app) {
             $app->post('/update/{id}', new \App\Controllers\Suppliers\UpdateAction($container))->setName('suppliers.update');
             $app->post('/delete/{id}', new \App\Controllers\Suppliers\DeleteAction($container))->setName('suppliers.delete');
           })
-          ->add(storeManagerPolicy);
+          ->add($middlewares['storeManagerPolicy']);
     })
     ->add(new \App\Middleware\Authenticate());
 }

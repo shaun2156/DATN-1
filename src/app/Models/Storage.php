@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Employee;
+use App\Models\ItemImport;
 
 class Storage extends Model
 {
@@ -33,5 +34,10 @@ class Storage extends Model
     public function updatedBy()
     {
         return $this->belongsTo(Employee::class, 'updated_by', 'employee_id');
+    }
+
+    public function itemImports()
+    {
+        return $this->hasMany(ItemImport::class, 'storage_id', 'storage_id');
     }
 }
