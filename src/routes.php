@@ -50,6 +50,19 @@ function routeMapping($app) {
             $app->post('/delete/{id}', new \App\Controllers\Suppliers\DeleteAction($container))->setName('suppliers.delete');
           })
           ->add($middlewares['storeManagerPolicy']);
+
+        $app
+          ->group('/items', function () use ($app, $container) {
+            $app->get('', new \App\Controllers\Items\IndexAction($container))->setName('items.index');
+            $app
+              ->group('', function () use ($app, $container) {
+                $app->get('/create', new \App\Controllers\Items\CreateAction($container))->setName('items.create');
+                $app->post('/store', new \App\Controllers\Items\StoreAction($container))->setName('items.store');
+                $app->get('/edit/{id}', new \App\Controllers\Items\EditAction($container))->setName('items.edit');
+                $app->post('/update/{id}', new \App\Controllers\Items\UpdateAction($container))->setName('items.update');
+              })
+              ->add($middlewares['storeManagerPolicy']);
+          });
     })
     ->add(new \App\Middleware\Authenticate());
 }

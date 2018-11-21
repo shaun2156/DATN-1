@@ -13,11 +13,23 @@ class Employee extends Model
 
     public function employeeRoles()
     {
-        return self::hasMany(EmployeeRoleAccess::class, 'employee_id', 'employee_id');
+        return $this->hasMany(EmployeeRoleAccess::class, 'employee_id', 'employee_id');
     }
 
     public function person()
     {
-        return self::belongsTo(Person::class, 'person_id');
+        return $this->belongsTo(Person::class, 'person_id');
+    }
+
+    public function hasRole($role)
+    {
+        $roleConfig = require(__DIR__ . '/../../config/roles.php');
+        $checkRole = $this->query()
+            ->join('employee_role_access', 'employee.employee_id', '=', 'employee_role_access.employee_id')
+            ->where('employee_role_access.role_id', $roleConfig[$role])
+            ->where('employee_role_access.employee_id', $this->employee_id)
+            ->get();
+
+        return count($checkRole) !== 0;
     }
 }

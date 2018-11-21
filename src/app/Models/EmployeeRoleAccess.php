@@ -9,14 +9,15 @@ use App\Models\Role;
 class EmployeeRoleAccess extends Model
 {
     protected $table = 'employee_role_access';
+    protected $primaryKey = 'role_access_id';
 
     public function employee()
     {
-        return self::belongsTo(Employee::class, 'employee_id');
+        return $this->belongsTo(Employee::class, 'employee_id', 'employee_id');
     }
 
     public function role()
     {
-        return self::belongsTo(Role::class, 'role_id');
+        return $this->belongsTo(Role::class, 'role_id', 'role_id');
     }
 }

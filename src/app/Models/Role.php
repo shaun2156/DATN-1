@@ -12,6 +12,6 @@ class Role extends Model
 
     public function roleEmployees()
     {
-        return self::hasMany(EmployeeRoleAccess::class, 'role_id', 'role_id');
+        return $this->hasMany(EmployeeRoleAccess::class, 'role_id', 'role_id');
     }
 }
