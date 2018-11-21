@@ -1,0 +1,114 @@
+{% extends "layouts/app.twig" %}
+
+{% block content %}
+<div>
+  <div class="cate-index">
+
+    {%  if error  %}
+    <div style="margin: 1em;" class="alert alert-danger" role="alert">{{ error }}</div>
+    {%  endif  %}
+
+    {%  if message  %}
+    <div style="margin: 1em;" class="alert alert-success" role="alert">{{ message }}</div>
+    {%  endif  %}
+
+    {% if session.user.employee.hasRole('storage_manager') == true %}
+    <div>
+        <a href="{{ path_for('items.create') }}" class="btn btn-primary btn-cate-new">Create Item</a>
+    </div>
+    {% endif %}
+
+    <table class="table">
+        <thead>
+            <td scope="col">Id</td>
+            <td scope="col">Name</td>
+            <td scope="col">Short Description</td>
+            <td scope="col">Current Price</td>
+            <td scope="col">Original Price</td>
+            <td scope="col">Category</td>
+            <td scope="col">Created By</td>
+            <td scope="col">Created At</td>
+            <td scope="col">Updated By</td>
+            <td scope="col">Updated At</td>
+        </thead>
+
+        <tbody>
+            {% for item in items %}
+                <tr>
+                    <td>{{ item.item_id }}</td>
+                    <td>{{ item.name }}</td>
+                    <td>{{ item.short_description }}</td>
+                    <td>{{ item.current_price }}</td>
+                    <td>{{ item.original_price }}</td>
+                    <td>{{ item.category.name }}</td>
+                    <td>{{ item.createdBy.person.full_name }}</td>
+                    <td>{{ item.created_date }}</td>
+                    <td>{{ item.updatedBy.person.full_name }}</td>
+                    <td>{{ item.updated_date }}</td>
+                    <td>
+                        <a href="{{ path_for('items.edit', { id: item.item_id }) }}" class="btn btn-primary">Update</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <nav aria-label="Page navigation example">
+        {% set nearbyPagesLimit = 4 %}
+        <ul class="pagination flex-wrap">
+            {% if items.onFirstPage %}
+            <li class="page-item disabled">
+                <a href="#" class="page-link">First Page</a>
+            </li>
+            <li class="disabled page-item">
+            {% else %}
+            <li class="page-item">
+                <a href="{{ items.url(1) }}" class="page-link">First Page</a>
+            </li>
+            <li  class="page-item">
+            {% endif %}
+                <a href="{{ items.previousPageUrl }}" class="page-link"  rel="prev">Previous</a>
+            </li>
+
+            {% for page in 1..items.lastPage %}
+                {% if items.currentPage - nearbyPagesLimit == loop.index %}
+                    {# dot before #}
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#">...</a>
+                    </li>
+                {% elseif items.currentPage + nearbyPagesLimit == loop.index %}
+                    {# dot after #}
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#">...</a>
+                    </li>
+                {% elseif items.currentPage - nearbyPagesLimit > loop.index %}
+                    {# hide all before #}
+                {% elseif items.currentPage + nearbyPagesLimit < loop.index %}
+                    {# hide all after #}
+                {% else %}
+                    <li {% if items.currentPage == loop.index  %} class="page-item active"{% endif %}>
+                        <a href="{{ items.url(page) }}" class="page-link">{{ loop.index }}</a>
+                    </li>
+                {% endif %}
+            {% endfor %}
+
+            {% if items.hasMorePages %}
+            <li  class="page-item">
+                <a class="page-link" href="{{ items.nextPageUrl }}" rel="next">Next</a>
+            </li>
+            <li class="page-item">
+                <a href="{{ items.url(items.lastPage) }}" class="page-link">Last Page</a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+                <a class="page-link" href="{{ items.nextPageUrl }}" rel="next">Next</a>
+            </li>
+            <li class="page-item disabled">
+                <a href="#" class="page-link">Last Page</a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+  </div>
+</div>
+{% endblock %}
