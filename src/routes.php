@@ -29,6 +29,9 @@ function routeMapping($app) {
       $app->get('/category/edit/{id}', new \App\Controllers\Categories\EditAction($container))->setName('category.edit');
       $app->post('/category/update/{id}', new \App\Controllers\Categories\UpdateAction($container))->setName('category.update');
 
+      $app->get('/storeConfig', new \App\Controllers\StoreConfig\IndexAction($container))->setName('store_config.index');
+      $app->post('/updateStoreConfig', new \App\Controllers\StoreConfig\UpdateAction($container))->setName('store_config.update');
+
       $app
         ->group('/storages', function () use ($app, $container) {
           $app->get('', new \App\Controllers\Storages\IndexAction($container))->setName('storages.index');
@@ -52,7 +55,7 @@ function routeMapping($app) {
           ->add($middlewares['storeManagerPolicy']);
 
         $app
-          ->group('/items', function () use ($app, $container) {
+          ->group('/items', function () use ($app, $container, $middlewares) {
             $app->get('', new \App\Controllers\Items\IndexAction($container))->setName('items.index');
             $app
               ->group('', function () use ($app, $container) {

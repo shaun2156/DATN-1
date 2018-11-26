@@ -38,8 +38,8 @@
                     <td>{{ item.item_id }}</td>
                     <td>{{ item.name }}</td>
                     <td>{{ item.short_description }}</td>
-                    <td>{{ item.current_price }}</td>
-                    <td>{{ item.original_price }}</td>
+                    <td>{{ item.current_price|number_format(0) }}</td>
+                    <td>{{ item.original_price|number_format(0) }}</td>
                     <td>{{ item.category.name }}</td>
                     <td>{{ item.createdBy.person.full_name }}</td>
                     <td>{{ item.created_date }}</td>

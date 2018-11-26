@@ -1,0 +1,54 @@
+{% extends "layouts/app.twig" %}
+
+{% block content %}
+<div style="margin-top: 5%;">
+    <h1>Create Storage</h1>
+    <form method="POST" action="{{ path_for('store_config.update') }}">
+        <div class="form-group row">
+            <label for="name" class="col-sm-2 col-form-label">Store Name</label>
+            <div class="col-sm-8">
+                <input type="text" id="store_name" name="store_name" class="form-control"
+                    placeholder="Store Name" required value="{{ store_name.config_value }}">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="name" class="col-sm-2 col-form-label">Store Address</label>
+            <div class="col-sm-8">
+                <input type="text" id="store_address" name="store_address" class="form-control"
+                    placeholder="Store Address" required value="{{ store_address.config_value }}">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="name" class="col-sm-2 col-form-label">Store Phone</label>
+            <div class="col-sm-8">
+                <input type="text" id="store_phone" name="store_phone" class="form-control"
+                    placeholder="Phone" required value="{{ store_phone.config_value }}">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="name" class="col-sm-2 col-form-label">Store Email</label>
+            <div class="col-sm-8">
+                <input type="text" id="store_email" name="store_email" class="form-control"
+                    placeholder="Email" required value="{{ store_email.config_value }}">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="name" class="col-sm-2 col-form-label">About</label>
+            <div class="col-sm-8">
+                <input type="text" id="store_about" name="store_about" class="form-control"
+                    placeholder="About description" required value="{{ store_about.config_value }}">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="name" class="col-sm-2 col-form-label">Contact description:</label>
+            <div class="col-sm-8">
+                <input type="text" id="contact_description" name="contact_description" class="form-control"
+                    placeholder="Contact" required value="{{ contact_description.config_value }}">
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+        <a href="{{ path_for('store_config.index') }}" class="btn btn-warning">Cancel</a>
+    </form>
+</div>
+{% endblock %}

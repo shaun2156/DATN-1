@@ -16,7 +16,7 @@ class IndexAction
     public function __invoke($request, $response, $args)
     {
         $params = $request->getQueryParams();
-        $page = $params['page'] !== null ? $params['page'] : 1;
+        $page = isset($params['page']) ? $params['page'] : 1;
 
         // Paginate 10 item per page
         $items = Item::with([
@@ -26,12 +26,12 @@ class IndexAction
         ])->paginate(10, ['*'], 'page', $page);
         $items->setPath('/items');
 
-        if ($_SESSION['error'] && strlen($_SESSION['error']) !== 0) {
+        if (isset($_SESSION['error']) && strlen($_SESSION['error']) !== 0) {
             $args['error'] = $_SESSION['error'];
             unset($_SESSION['error']);
         }
 
-        if ($_SESSION['message'] && strlen($_SESSION['message']) !== 0) {
+        if (isset($_SESSION['message']) && strlen($_SESSION['message']) !== 0) {
             $args['message'] = $_SESSION['message'];
             unset($_SESSION['message']);
         }

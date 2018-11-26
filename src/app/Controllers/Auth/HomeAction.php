@@ -13,7 +13,7 @@ class HomeAction
     }
 
     public function __invoke($request, $response, $args) {
-        if ($_SESSION['error'] && strlen($_SESSION['error']) !== 0) {
+        if (isset($_SESSION['error']) && strlen($_SESSION['error']) !== 0) {
             $args['error'] = $_SESSION['error'];
             unset($_SESSION['error']);
         }

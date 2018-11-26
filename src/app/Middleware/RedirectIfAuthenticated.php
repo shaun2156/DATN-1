@@ -6,7 +6,7 @@ class RedirectIfAuthenticated
 {
     public function __invoke($request, $response, $next)
     {
-        if ($_SESSION['user']) {
+        if (isset($_SESSION['user'])) {
             return $response->withRedirect('/dashboard');
         }
 

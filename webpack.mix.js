@@ -17,7 +17,7 @@ mix
     'node_modules/bootstrap/dist/css/bootstrap.min.css',
     'src/resources/assets/css/style.css'
   ], 'src/public/css/style.css');
-
+mix.setPublicPath('public');
 // Full API
 // mix.js(src, output);
 // mix.react(src, output); <-- Identical to mix.js(), but registers React Babel compilation.
